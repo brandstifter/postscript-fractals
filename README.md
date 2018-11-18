@@ -84,7 +84,7 @@ The tok_id is also interpreted as an operator precedence, which is important for
     [10 (z)] [7000 (complex_sqr)] [5100 (complex_add)] [10 (c)]
     					
 #### parse
-Parses the tokens into a a syntax tree representation.
+Parses the tokens into a syntax tree representation.
 
     [10 (z)] [7000 (complex_sqr)] [5100 (complex_add)] [10 (c)] parse
     [10 (z)] [7000 (complex_sqr)] [10 (c)] [5100 (complex_add)]
