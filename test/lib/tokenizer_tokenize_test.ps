@@ -1,0 +1,51 @@
+(lib/test.ps) run 
+
+(lib/tokenizer.ps) run
+
+
+
+
+
+0 ut_line_set 
+/t1 { () tokenize } def
+t1 count 0 eq test 
+
+/t2 { (1) tokenize } def 
+t2 count 1 eq test 
+t2 1 tok_opd tok_eq testu  
+
+/t3 { (a + b) tokenize } def 
+t3 count 3 eq test 
+t3 (b) tok_opd tok_eq test 
+t3 pop tok_add tok_eq test 
+t3 pop pop (a) tok_opd tok_eq testu
+
+/t4 { (abc) tokenize } def 
+t4 count 1 eq test 
+t4 (abc) tok_opd tok_eq testu 
+
+/t5 { (abc + d) tokenize } def 
+t5 count 3 eq test 
+t5 pop pop (abc) tok_opd tok_eq test
+t5 pop tok_add tok_eq test 
+t5 (d) tok_opd tok_eq testu 
+
+/t6 { (+ - * /) tokenize } def 
+t6 count 4 eq test 
+t6 tok_div tok_eq test 
+t6 pop tok_mul tok_eq test 
+t6 pop pop tok_sub tok_eq test 
+t6 pop pop pop tok_add tok_eq testu 
+
+/t7 { (abc ) tokenize } def 
+t7 count 1 eq test 
+t7 (abc) tok_opd tok_eq testu 
+
+
+/t8 { (a + b * c - d) tokenize } def 
+t8 (d) tok_opd tok_eq test
+t8 pop tok_sub tok_eq testu 
+
+99 ut_line_set 
+
+

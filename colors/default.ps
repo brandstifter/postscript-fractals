@@ -1,0 +1,37 @@
+/escape_to_color {                    % real -> real real real 
+
+    % escape = [o, max_iter] 
+    /idx exch iterate_maximum div 1024 mul def 
+
+    idx 256 lt { 
+        /r 1 def 
+        /g idx 255 div def 
+        /b 0 def 
+    }{
+    idx 512 lt { 
+        /r 512 idx sub 255 div def 
+        /g 1 def 
+        /b 0 def 
+    }{
+    idx 768 lt {
+        /r 0 def 
+        /g 768 idx sub 255 div def 
+        /b idx 512 sub 255 div def 
+    }{ 
+    idx 1024 lt {
+        /r idx 768 sub 255 div def 
+        /g 0 def 
+        /b 1 def 
+    }{
+        /r 0 def 
+        /g 0 def 
+        /b 0 def 
+    } ifelse 
+    } ifelse 
+    } ifelse 
+    } ifelse 
+    
+    r g b setrgbcolor
+} def 
+
+

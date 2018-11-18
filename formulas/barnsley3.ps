@@ -1,0 +1,75 @@
+
+
+/max_iter 1000 def 
+
+%/zoom 16 def 
+%/center_x 0.75 def 
+%/center_y -0.25 def 
+
+%/zoom 32 def 
+%/center_x 0.72 def 
+%/center_y -0.28 def 
+
+/zoom 4 def 
+/center_x 0.72 def 
+/center_y -0.285 def 
+
+/zoom 2 def 
+/center_x 0.72 def 
+/center_y 0.25 def
+
+
+/zoom 0.75 def 
+/center_x 0 def 
+/center_y 0 def
+
+%/zoom 128 def 
+%/center_x 0.7 def 
+%/center_y -0.293 def 
+%
+%/zoom 256 def 
+%/center_x 0.7 def 
+%/center_y -0.293 def 
+
+%
+% z <- 0
+% z <- zz + c
+%
+
+/recusion_escape {                      % real imag -> real
+    6 dict begin 
+
+        /ci exch def 
+        /cr exch def 
+        /r cr def 
+        /i ci def 
+    
+%       (enter\n) print
+
+        0 1 max_iter {
+            /time exch def 
+
+%           time to_s print ( time \n) print
+             
+            r i complex_abs 2 lt {
+                
+                r 0 gt {
+                    r r mul i i mul sub 1 sub 
+                    r i mul 2 mul 
+                }{
+                    r r mul i i mul sub 1 sub cr add r mul 
+                    r i mul 2 mul ci add r mul 
+                } ifelse 
+
+
+                /i exch def 
+                /r exch def 
+
+%               r to_s print ( r \n) print 
+            }
+            { exit } ifelse
+        } for 
+        time 
+    end 
+} def 
+

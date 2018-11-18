@@ -1,0 +1,76 @@
+(lib/test.ps) run 
+
+(lib/tokenizer.ps) run
+
+% ----------------------------------------------------------------------------
+%
+% next_token 
+%
+%
+
+
+100 ut_line_set 
+
+/t101 { (a + b) next_token } def 
+t101 (a) eq test 
+t101 count 2 eq test 
+t101 pop (+ b) eq test 
+ut_line_inc
+
+/t102 { (a) next_token } def 
+t102 (a) eq test 
+t102 count 2 eq test 
+t102 pop () eq test 
+ut_line_inc
+
+/t103 { (a ) next_token } def 
+t103 (a) eq test 
+t103 count 2 eq test 
+t103 pop () eq test 
+ut_line_inc
+
+/t104 { () next_token } def 
+t104 () eq test 
+t104 count 1 eq test 
+ut_line_inc
+
+/t105 { ( ) next_token } def 
+t105 () eq test 
+t105 pop () eq test 
+t105 count 2 eq test 
+ut_line_inc
+
+/t106 { (abc + x) next_token } def 
+t106 (abc) eq test 
+t106 pop (+ x) eq test 
+ut_line_inc
+
+/t107 { (1) next_token } def 
+t107 (1) eq test 
+t107 count 2 eq test 
+t107 pop () eq test 
+% ut_line_inc
+
+
+0 ut_line_set 
+/t1 { tok_eof tok_id } def 
+t1 count 1 eq test 
+t1 0 eq test 
+
+50 ut_line_set 
+/t50 { tok_eof tok_string } def 
+t50 count 1 eq test 
+t50 () eq test 
+
+
+1000 ut_line_set 
+/t1001 { (1) tok_opd } def 
+t1001 count 1 eq test 
+t1001 tok_id 10 eq test 
+t1001 tok_string (1) eq test 
+
+
+
+2000 ut_line_set 
+tok_add token_is_operator testu 
+(io) tok_opd token_is_operator not testu 

@@ -1,0 +1,179 @@
+(lib/system.ps) run
+
+%%
+% 
+%  .6 --  1
+% -.6 -- -1   
+/symmetric_ceil { 
+    dup 0 lt { -.5 }{ .5 } ifelse 
+    add round 
+} def 
+
+% dup 0 lt { 1 sub }{ 1 add } ifelse 
+% 10 exch exp
+
+
+/rxm { width 2 div } def 
+/rxh { width               } def 
+/rxl { 0                   } def 
+
+/rxr { rxh rxl sub } def 
+/rxs { rxr log symmetric_ceil } def
+
+
+
+/rym { height 2 div round  } def 
+/ryh { height              } def 
+/ryl { 0                   } def 
+
+
+
+/rrm { rxm x_to_r } def 
+/rrh { rxh x_to_r } def 
+/rrl { rxl x_to_r } def 
+
+/rrr { rrh rrl sub } def 
+/rrnb { rrr log symmetric_ceil 10 exch exp } def 
+/rrbl { rrl rrnb div floor rrnb mul } def 
+/rrbh { rrh rrnb div ceiling rrnb mul } def 
+/rrbs { rrbh rrbl sub rrnb mul } def 
+
+
+/rim { rym y_to_i } def 
+/rih { ryh y_to_i } def 
+/ril { ryl y_to_i } def 
+
+/rir { rih ril sub } def 
+/rinb { rir log symmetric_ceil 10 exch exp } def
+/ribl { ril rinb div floor rinb mul } def 
+/ribh { rih rinb div ceiling rinb mul } def 
+/ribs { ribh ribl sub 10 div } def 
+
+
+    /xl1_line { -5 moveto  0 -40 rlineto } def 
+    /yl1_line { rxh 5 add exch moveto 40   0 rlineto } def 
+
+
+    /xl2_line { -5 moveto 0 -20 rlineto } def 
+    /yl2_line { rxh 5 add exch moveto 20 0 rlineto } def 
+
+
+
+/ruler { 
+    1 setlinewidth 
+
+    /cur rrbl def   
+    { 
+        cur r_to_x xl2_line stroke 
+        cur to_s dup cur r_to_x string_center_at -40 moveto show 
+        
+        cur rrbs add /cur exch def 
+        cur rrh gt { exit } if
+    } loop 
+
+
+    /cur ribl def 
+    { 
+        cur to_s print 
+        cur i_to_y yl2_line stroke 
+        cur to_s rxh 29 add cur i_to_y 2 sub moveto show 
+        
+        cur ribs add /cur exch def 
+        cur rih gt { exit } if
+    } loop 
+} def  
+
+
+/colormap {
+    /yy exch def 
+
+    gsave 
+
+    /cm_leftoffset 50 def 
+    /cm_length    -30 def 
+
+    2 setlinewidth 
+
+    0 1 width {
+        /x exch def 
+        /v { x width div iterate_maximum mul } def 
+        x yy moveto 
+
+        0 cm_length rlineto 
+        v escape_to_color 
+    
+        stroke 
+    } for 
+    
+    grestore 
+} def  
+
+
+/lmh_ruler {
+    %x l m h 
+    gsave 
+
+    1.5 setlinewidth 
+    
+        rxl xl1_line stroke 
+        rxm xl1_line stroke 
+        rxh xl1_line stroke 
+    
+        rrl to_s dup rxl string_center_at -55 moveto    show 
+        rrm to_s dup rxm string_center_at -55 moveto    show
+        rrh to_s dup rxh string_center_at -55 moveto    show
+
+        ryl yl1_line stroke 
+        rym yl1_line stroke 
+        ryh yl1_line stroke 
+    
+        ril to_s rxh 45 add ryl 2 sub moveto show 
+        rim to_s rxh 45 add rym 2 sub moveto show
+        rih to_s rxh 45 add ryh 2 sub moveto show
+
+    grestore
+} def 
+
+
+/legend {
+    /Courier findfont
+    9 scalefont
+    0 0 0 setrgbcolor 
+    setfont
+
+    lmh_ruler
+    
+    500 colormap
+
+
+
+    % range, center, zoom
+
+    /offset 0 def 
+    /add_offset { offset add 20 add  /offset exch def } def 
+
+    offset -85 moveto (zomm: ) zoom to_s string_concat dup show 
+    stringwidth pop add_offset 
+
+    offset -85 moveto 
+    (x: [ ) 
+        rrl to_s    string_concat  
+        ( | )       string_concat
+        rrm to_s    string_concat  
+        ( | )       string_concat
+        rrh to_s    string_concat
+        ( ])        string_concat  
+    dup show 
+    stringwidth pop add_offset 
+
+    offset -85 moveto 
+    (y: [ ) 
+        ril to_s    string_concat  
+        ( | )       string_concat
+        rim to_s    string_concat
+        ( | )       string_concat
+        rih to_s    string_concat
+        ( ])        string_concat  
+    show 
+
+} def 

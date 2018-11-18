@@ -1,0 +1,103 @@
+(lib/test.ps) run 
+
+(lib/tokenizer.ps) run
+
+
+% ----------------------------------------------------------------------------
+%
+% binary_opeator 
+%
+%
+
+/t1 { (++) binary_operator } def 
+t1 test 
+t1 count 2 eq test 
+t1 pop tok_cadd tok_eq testu 
+
+/t2 { (//) binary_operator } def 
+t2 test 
+t2 count 2 eq test 
+t2 pop tok_cdiv tok_eq testu 
+
+
+100 ut_line_set 
+
+/t101 { (+) binary_operator } def 
+t101 test 
+t101 count 2 eq test 
+t101 pop tok_add tok_eq testu 
+
+/t102 { (/) binary_operator } def 
+t102 test
+t102 count 2 eq test 
+t102 pop tok_div tok_eq testu 
+
+
+
+1000 ut_line_set 
+/t1001 { () binary_operator } def 
+t1001 not test 
+t1001 count 2 eq testu 
+
+/t1002 { (1) binary_operator } def 
+t1002 not test 
+t1002 count 2 eq test 
+t1002 pop (1) eq testu 
+
+/t1003 { (abc) binary_operator } def 
+t1003 not test 
+t1003 count 2 eq test 
+t1003 pop (abc) eq testu 
+
+
+
+
+20 ut_line_set 
+/t21 { (^^2) unary_postfix_operator } def 
+t21 test 
+t21 count 2 eq test 
+t21 pop tok_csqr tok_eq testu 
+
+
+
+2000 ut_line_set 
+/t2001 { () unary_postfix_operator } def 
+t2001 not test 
+t2001 count 2 eq testu 
+
+/t2002 { (1) unary_postfix_operator } def 
+t2002 not test 
+t2002 count 2 eq test 
+t2002 pop (1) eq testu 
+
+/t2003 { (abc) unary_postfix_operator } def 
+t2003 not test 
+t2003 count 2 eq test 
+t2003 pop (abc) eq testu 
+
+
+
+
+30 ut_line_set 
+/t31 { (||) unary_operator } def 
+t31 test 
+t31 count 2 eq test 
+t31 pop tok_cabs tok_eq testu 
+
+
+
+3000 ut_line_set 
+/t3001 { () unary_operator } def 
+t3001 not test 
+t3001 count 2 eq testu 
+
+/t3002 { (1) unary_operator } def 
+t3002 not test 
+t3002 count 2 eq test 
+t3002 pop (1) eq testu 
+
+/t3003 { (abc) unary_operator } def 
+t3003 not test 
+t3003 count 2 eq test 
+t3003 pop (abc) eq testu 
+

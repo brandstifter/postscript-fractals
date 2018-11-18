@@ -1,0 +1,279 @@
+(lib/system.ps) run
+
+
+% ----------------------------------------------------------------------------
+% token definition 
+%  
+% 
+%
+
+
+
+/tok_cadd [5100 (complex_add)] def 
+/tok_csub [5101 (complex_sub)] def 
+/tok_cmul [5310 (complex_mul)] def 
+/tok_cdiv [5311 (complex_div)] def 
+
+/tok_csqr [7000 (complex_sqr)] def 
+/tok_ccub [7000 (complex_cub)] def 
+
+/tok_cabs [6000 (complex_abs)] def 
+/tok_cria [6000 (complex_ri_abs)] def 
+
+/tok_add [4110 (add)] def 
+/tok_sub [4111 (sub)] def 
+/tok_mul [4310 (mul)] def 
+/tok_div [4311 (div)] def 
+
+/tok_opar [9999 (\()] def 
+/tok_cpar [9998 (\))] def 
+
+/tok_ws  [1 ( )] def 
+/tok_inv [-1 ()] def 
+
+/tok_eof [0 ()] def 
+
+% ----------------------------------------------------------------------------
+% token operations
+%  
+% 
+%
+
+
+/tok_id      { 0 get } def              %% extract id of token 
+/tok_string  { 1 get } def              %% extract token opcode 
+
+/token_is_operator { tok_id 999 gt  } def 
+/token_is_variable { tok_id 10 eq } def
+/token_is_number   { tok_id 11 eq } def 
+/token_is_oparen   { tok_id 9999 eq } def 
+/token_is_cparen   { tok_id 9998 eq } def 
+
+/token_is_paren    { dup token_is_cparen exch token_is_oparen or } def 
+/token_is_operant  { dup token_is_variable exch token_is_number or } def 
+
+/token_is_z { dup token_is_variable exch tok_string (z) eq and } def 
+/token_is_c { dup token_is_variable exch tok_string (c) eq and } def 
+
+%%
+
+% tok_opd -- create an operand
+%  
+% STACK: any 
+% OUT:   [10, any] 
+/tok_opd     { 10 exch 2 packedarray } def 
+
+/tok_num     { 11 exch 2 packedarray } def  
+
+
+% ----------------------------------------------------------------------------
+% token compare functions
+%  
+% 
+%
+
+%%
+% tok_less -- compare < 
+%
+% STACK: tok1 tok2 
+% OUT:   true if tok1_id < tok2_id
+%        false otherwise
+/tok_lt { tok_id exch tok_id exch sub  0 lt } def 
+/tok_gt { tok_id exch tok_id exch sub  0 gt } def 
+
+/tok_strict_lt {
+    tok_id exch tok_id exch sub dup 
+    0 lt exch 
+    -100 lt 
+    and
+} def 
+
+/tok_eq { tok_id exch tok_id eq } def 
+
+% ----------------------------------------------------------------------------
+% operator matching
+%  
+% 
+%
+
+
+%% 
+%
+%
+% EX: true
+%     [5100 (complex_add)]
+%
+%     false 
+%     (not_an_operator)  
+/binary_operator {
+
+
+    % complex operators 
+    dup (++) eq { tok_cadd }{
+    dup (--) eq { tok_csub }{
+    dup (**) eq { tok_cmul }{
+    dup (//) eq { tok_cdiv }{
+
+    % basic operators 
+    dup (+)  eq { tok_add }{
+    dup (-)  eq { tok_sub }{
+    dup (*)  eq { tok_mul }{
+    dup (/)  eq { tok_div }{
+
+    % not recognized
+        null 
+    } ifelse 
+    } ifelse 
+    } ifelse 
+    } ifelse 
+    } ifelse
+    } ifelse 
+    } ifelse 
+    } ifelse  
+
+    dup null eq { pop false } { exch pop true } ifelse 
+} def 
+
+
+/unary_postfix_operator {
+
+    % complex operators 
+    dup (^^2) eq { tok_csqr }{
+    dup (^^3) eq { tok_ccub }{
+
+        
+    % not recognized
+        null 
+    } ifelse 
+    } ifelse  
+
+    dup null eq { pop false } { exch pop true } ifelse 
+} def 
+
+/unary_operator {
+    % complex operators 
+
+    dup (||)  eq { tok_cabs }{
+    dup (|/)  eq { tok_cria }{
+    
+    % basic operators
+        
+    % not recognized
+        null 
+    } ifelse 
+    } ifelse  
+
+    dup null eq { pop false } { exch pop true } ifelse 
+} def 
+
+/parenthesis {
+    
+    dup (\() eq { tok_opar }{
+    dup (\)) eq { tok_cpar }{ 
+        null 
+    } ifelse
+    } ifelse 
+
+    dup null eq { pop false } { exch pop true } ifelse 
+} def
+
+%%
+% STACK: - 
+% OUT:   - [10 ( )]
+%
+/whitespace {
+    
+    dup ( ) eq { tok_ws }{
+        null 
+    } ifelse 
+
+    dup null eq { pop false } { exch pop true } ifelse 
+} def 
+
+% EX: true
+%     [11 (2 3)]
+%
+%     false 
+%     -
+/number {
+
+    /valid false def 
+    /str exch def 
+    
+    str (r) search 
+        true eq {
+        () eq   {
+        (r)  eq {
+            (i) search 
+                true eq {
+                    /r exch def 
+                (i)  eq { 
+                   /i exch def 
+                   /valid true def 
+                } if 
+                } if 
+        } if 
+        } if 
+        } if
+
+                
+    valid {        
+        r to_s ( ) i to_s string_concat string_concat tok_num
+        true 
+    }{
+        false 
+    } ifelse 
+} def 
+
+% ----------------------------------------------------------------------------
+% token operations
+%  
+% 
+%
+
+
+
+%% 
+% separate next token from string 
+%
+% STACK: string 
+% OUT:   token remain    (if found)
+%        () remaii       (if not found) 
+/next_token {
+    dup () eq { } { 
+        ( ) search { exch pop }{ () exch } ifelse  
+    } ifelse 
+} def 
+
+
+
+%%
+% tokenize 
+% 
+% STACK: string 
+% OUT:   [tokens ...] 
+%
+/tokenize {
+    {
+        next_token
+
+        dup () eq { 
+            pop exit 
+        }{
+
+            binary_operator { }{
+            unary_operator  { }{ 
+            number          { }{
+            unary_postfix_operator { }{
+                tok_opd       
+            } ifelse
+            } ifelse 
+            } ifelse
+            } ifelse
+
+            exch 
+        } ifelse  
+    } loop
+} def 
+
+

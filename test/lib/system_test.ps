@@ -1,0 +1,27 @@
+(lib/test.ps) run 
+(lib/system.ps) run 
+
+
+
+/t1 { 1 2 3 4 5 reverse_ps_operand_stack } def 
+t1 count 5 eq test 
+t1 1 eq test 
+t1 pop 2 eq test 
+t1 pop pop 3 eq test 
+t1 pop pop pop 4 eq test 
+t1 pop pop pop pop 5 eq testu 
+
+
+/t2 { 1 2 reverse_ps_operand_stack } def 
+t2 count 2 eq test 
+t2 1 eq test 
+t2 pop 2 eq testu 
+
+
+/t3 { 1 reverse_ps_operand_stack } def 
+t3 count 1 eq test 
+t3 1 eq testu
+
+/t4 { reverse_ps_operand_stack } def 
+t4 count 0 eq test 
+

@@ -1,0 +1,30 @@
+
+
+/ut_line  1  def 
+
+/ut_line_inc   { /ut_line  1 ut_line add  def } def 
+/ut_line_set   { /ut_line exch def } def  
+
+/ut_line_reset { 0 ut_line_set } def 
+/ut_line_print { ut_line 1 add to_s print } def
+
+
+
+ut_line_reset
+
+
+/test_woc{
+    ut_line_print (:  ) print 
+    { (OK) print }{ (FAIL --- !!\n) print pstack } ifelse (\n) print 
+} def 
+
+
+/ut_test_summary {
+    
+    
+} def 
+
+/test{ test_woc clear } def 
+
+/testu { test ut_line_inc } def 
+/todo { (TODO: \n) print } def  

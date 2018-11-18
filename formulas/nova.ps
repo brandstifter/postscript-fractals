@@ -1,0 +1,61 @@
+
+
+%Nova is Paul Derbyshire's Nova fractal.
+
+/max_iter 550 def 
+
+/zoom 0.33 def 
+/center_x 0 def 
+/center_y 0 def 
+
+
+%
+% z <- c
+% z = z - (@a * z * z * z - @b)/(@c * z * z) + #pixel
+%
+
+/a{ 1 0 }def 
+/b{ 2 0 }def 
+/c{ 3 0 }def 
+/e 1.01 def 
+
+/recusion_escape {                      % real imag -> real
+    7 dict begin 
+
+        /ci exch def 
+        /cr exch def 
+        /r cr def 
+        /i ci def 
+
+        0 1 max_iter {
+            /time exch def 
+
+            /lr r def 
+            /li i def 
+
+            % z = z - (@a * z * z * z - @b)/(@c * z * z) + #pixel
+            r i 
+                %(@a * z * z * z - @b)
+                a r i r i r i complex_mul complex_mul complex_mul b complex_sub 
+            
+                %(@c * z * z) 
+                c r i r i complex_mul complex_mul 
+                
+                complex_div 
+
+            complex_sub
+            cr ci 
+            complex_add
+            
+            /i exch def 
+            /r exch def 
+
+            %|z - last| > @epsilon
+            r i  lr li complex_sub complex_abs 
+            
+            e gt {exit}{} ifelse 
+        } for 
+        time 
+    end 
+} def 
+

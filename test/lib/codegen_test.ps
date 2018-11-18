@@ -1,0 +1,71 @@
+(lib/tokenizer.ps) run
+(lib/parser.ps) run
+(lib/codegen.ps) run
+(lib/test.ps) run 
+
+
+/cclear {
+    opstack_reset
+    clear 
+    /generated 0 string def 
+} def
+
+
+/t1 { (a) tokenize parse codegen } def 
+t1
+generated (a ) eq testu
+
+cclear
+
+
+/t2 { (z) tokenize parse codegen } def 
+t2 generated (zr zi ) eq testu
+
+cclear 
+
+
+/t3 { (z * a) tokenize parse codegen } def 
+t3 generated (zr zi a mul ) eq testu 
+
+
+
+
+
+cclear 
+/t4 { (z ** a) tokenize parse codegen } def 
+t4 generated (zr zi a complex_mul ) eq testu 
+
+cclear 
+/t5 { (z ** a ++ b) tokenize parse codegen } def 
+t5 generated (zr zi a complex_mul b complex_add ) eq testu 
+
+cclear 
+/t6 { (z ++ a ** b) tokenize parse codegen } def 
+t6 generated (zr zi a b complex_mul complex_add ) eq testu 
+
+
+
+cclear 
+/t7 { (z ^^2 ** b) tokenize parse codegen } def 
+t7 generated (zr zi complex_sqr b complex_mul ) eq testu 
+
+
+
+cclear 
+/t8 { (z * c) tokenize parse codegen } def 
+t8 generated (zr zi cr ci mul ) eq testu 
+
+cclear 
+/t9 { (z |/) tokenize parse codegen } def 
+t9 generated (zr zi complex_ri_abs ) eq testu 
+
+
+
+
+
+cclear 
+/t10 { ( \( \) ) tokenize % parse codegen
+ } def 
+%t10 generated ( ) eq testu 
+
+

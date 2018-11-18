@@ -1,0 +1,14 @@
+/d120 120 360 div def 
+
+/escape_to_color {                    % real -> real real real 
+
+    % escape = [o, max_iter] 
+    /idx exch iterate_maximum div def 
+   
+    d120  
+    1 
+    1 idx sub 
+    sethsbcolor
+} def 
+
+

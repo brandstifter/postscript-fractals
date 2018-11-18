@@ -1,0 +1,23 @@
+(lib/tokenizer.ps) run 
+(lib/system.ps) run 
+
+/tok_2_codestring {
+    dup token_is_z { pop (zr zi) }{  
+    dup token_is_c { pop (cr ci) }{ 
+        tok_string 
+    } ifelse 
+    } ifelse
+
+    generated exch string_concat string_append_ws 
+    /generated exch def 
+} def 
+
+
+
+/codegen {
+    /generated 0 string def 
+    count {
+        tok_2_codestring 
+    } repeat 
+    generated 
+} def

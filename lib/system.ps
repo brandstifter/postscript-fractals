@@ -1,0 +1,60 @@
+
+
+
+/to_s { 32 string cvs } def 
+
+/string_center_at { 
+    exch 
+    stringwidth pop 2 div
+    sub 
+} def 
+
+
+
+/string_concat {
+    /b exch def 
+    /a exch def 
+
+    a length b length add string 
+    /cc exch def 
+    cc 0 a putinterval 
+    cc a length b putinterval 
+    cc  
+} def 
+
+/string_append_ws { ( ) string_concat } def 
+/sc { string_concat } def 
+
+/360_to_100 { 3.6 div } def 
+
+/360_to_1 { 360 div } def
+
+
+/tan { dup sin exch cos div } def
+
+/reverse_ps_operand_stack {
+
+    count 
+    /cc exch def 
+    cc 1 gt {
+        /ii cc def 
+        cc 1 sub { 
+            ii 1 roll 
+            /ii ii 1 sub def 
+        } repeat 
+    } if
+
+
+} def 
+
+
+
+
+%/parameters2userdict {
+%    systemdict (fc_iterate_formula) known 
+%        { /iterate_formula_string systemdict (fc_iterate_formula) get def }
+%        { (fc_iterate_formula not defined) print quit } ifelse 
+%    systemdict (fc_limit_formula) known 
+%        { /limit_formula_string systemdict (fc_limit_formula) get def } 
+%        { (fc_limit_formula not defined) print quit } ifelse 
+%} def 

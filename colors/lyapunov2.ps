@@ -1,0 +1,15 @@
+
+
+/escape_to_color {                    % real -> real real real 
+
+    /i exch iterate_maximum div def  
+
+    %          y = 0.4/3.6 - (i/9)
+    0.4 360_to_100 i 9 div sub 
+    1 
+    1 i sub 
+
+    sethsbcolor
+} def 
+
+

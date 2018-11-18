@@ -1,0 +1,50 @@
+(lib/test.ps) run 
+
+(lib/tokenizer.ps) run
+
+% ----------------------------------------------------------------------------
+%
+% tok_less  
+%
+%
+
+/t1 { tok_cadd tok_cmul tok_lt } def 
+t1 testu 
+
+/t2 { tok_cmul tok_cadd tok_lt not } def 
+t2 testu
+
+/t3 { tok_cadd tok_cadd tok_lt not } def 
+t3 testu
+
+/t4 { tok_cadd tok_cmul tok_strict_lt } def 
+t4 testu 
+
+/t5 { tok_cadd tok_csub tok_strict_lt not } def 
+t5 testu 
+
+/t6 { tok_cadd tok_cadd tok_strict_lt not } def 
+t6 testu 
+
+
+
+% ----------------------------------------------------------------------------
+%
+% operator ==  
+%
+%
+
+100 ut_line_set 
+
+/t101 { tok_cadd tok_cadd tok_eq } def 
+t101 testu 
+
+/t102 { tok_cadd tok_csub tok_eq not } def 
+t102 testu
+
+/t103 { tok_cadd tok_cmul tok_eq not } def 
+t103 testu
+
+
+
+

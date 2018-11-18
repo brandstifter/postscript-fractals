@@ -1,0 +1,57 @@
+%!PS-Adobe-2.0
+%%Mandelbrot Menge 
+%%Creator Thomas Brandstätter
+%%Orientation: Landscape
+%%DocumentMedia: a4 595 842 80 () ()
+%%Pages: 1
+%%EndComments
+%%EndProlog
+%%BeginSetup
+  % A4, rotated 90
+  << /PageSize [595 842] /Orientation 3 >> setpagedevice
+%%EndSetup 
+
+%%Page: 1 1
+%%BeginPageSetup
+  90 rotate 0 -595 translate
+%%EndPageSetup
+
+  
+(lib/system.ps) run
+(lib/complex.ps) run 
+
+(lib/tokenizer.ps) run
+(lib/parser.ps)    run
+(lib/codegen.ps)   run
+
+/wh_point_step { 5 } def                %% x y step
+/wh_scale { 1 div floor cvi } def       %% scale whole image 
+
+/width  { 725 wh_scale } def            %% fractal width 
+/height { 450 wh_scale } def            %% fractal height
+
+/center_y   0 def                   %% x center of view in complex area
+/center_x   1.5 def                    %% y center of view in complex area
+/zoom       16 def                      %% zoom level of view 
+
+/color_map       (continues) def          %% look inside ./colors directory 
+/iterate_maximum 100 def                %% recusion escape value 
+/limit_value     4   def                %% limit of z 
+
+
+(z ^^2 ||) tokenize parse codegen 
+/limit_formula exch def 
+
+(z ^^2 -- c) tokenize parse codegen 
+/iterate_formula exch def
+
+(colors/) color_map (.ps) string_concat string_concat run 
+(lib/fractal.ps) run 
+(lib/legend.ps) run
+25 90  translate
+
+legend
+fractal 
+showpage 
+
+%%EOF

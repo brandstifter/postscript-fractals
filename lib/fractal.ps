@@ -1,0 +1,82 @@
+
+/x_to_r {
+    /delta 3.5 zoom div def
+    width div delta mul 
+    center_x delta 2 div sub 
+    add
+} def
+
+/y_to_i {
+    /delta 2 zoom div def
+    height div delta mul 
+    center_y delta 2 div sub 
+    add
+} def
+
+/r_to_x {
+    /delta 3.5 zoom div def
+    center_x delta 2 div sub 
+    sub
+    width mul delta div 
+} def
+
+/i_to_y {
+    /delta 2 zoom div def
+    center_y delta 2 div sub 
+    sub
+    height mul delta div 
+} def
+
+/pixel_coordinate_XR_map width array def 
+0 1 pixel_coordinate_XR_map length 1 sub {
+    pixel_coordinate_XR_map exch dup x_to_r put 
+} for 
+
+/pixel_coordinate_YI_map width array def 
+0 1 pixel_coordinate_YI_map length 1 sub {
+    pixel_coordinate_YI_map exch dup y_to_i put 
+} for 
+
+
+
+/recusion_escape {
+
+    /ci exch def /cr exch def   
+    /zi    0 def /zr 0 def   
+
+    /lfe { limit_formula cvx } def 
+    /ife { iterate_formula cvx } def
+    0 1 iterate_maximum {
+        /idx exch def 
+
+        lfe exec limit_value lt {
+            ife exec 
+            
+            /zi exch def /zr exch def 
+        }
+        { exit } ifelse
+    } for 
+    idx 
+} def
+
+
+
+/fractal {
+    2 setlinewidth
+    0 wh_point_step height 1 sub {      /y exch def 
+        0 wh_point_step width 1 sub {   /x exch def 
+            x y moveto
+            1 1 rlineto
+
+            pixel_coordinate_XR_map x get 
+            pixel_coordinate_YI_map y get 
+            
+            recusion_escape
+            escape_to_color 
+    
+            stroke 
+        } for 
+
+        % y 200 eq { exit } if 
+    } for  
+} def 

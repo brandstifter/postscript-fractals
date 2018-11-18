@@ -1,0 +1,18 @@
+
+/d240 { 240 360_to_1 } def 
+/d120 { 120 360_to_1 } def 
+
+/escape_to_color {                    % real -> real real real 
+
+    /i exch iterate_maximum div def  
+    
+    1  
+    1 
+    i 1 eq { 0 }{ 1 } ifelse 
+
+    sethsbcolor
+} def 
+
+
+
+

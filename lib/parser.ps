@@ -1,0 +1,98 @@
+(lib/tokenizer.ps) run 
+
+% ----------------------------------------------------------------------------
+% opstack definition & functions
+%  
+% 
+%
+
+
+/opstack_size 256 def 
+
+/opstack opstack_size array def 
+/opstack_pos { 0 } def 
+
+/opstack_isfull { opstack_pos opstack_size 1 sub eq } def 
+/opstack_isempty { opstack_pos 0 eq } def 
+
+/opstack_reset  { 
+    /opstack_pos 0 def 
+    /opstack opstack_size array def 
+} def 
+
+/opstack_push { 
+    /object exch def 
+    opstack_isfull not {
+        opstack opstack_pos object put 
+        /opstack_pos  opstack_pos 1 add def 
+    } if 
+} def 
+
+/opstack_push_ws { tok_ws opstack_push } def 
+
+/opstack_get { opstack opstack_pos 1 sub get } def 
+
+/opstack_pop {
+    opstack_get 
+    /opstack_pos opstack_pos 1 sub def 
+} def 
+
+/opstack_pop_bottom {
+    opstack_pos  { opstack_pop } repeat  
+} def 
+
+/opstack_pop_to_open_paren {
+    {
+        opstack_get tok_id tok_opar tok_id eq { pop exit } { } ifelse  
+    } loop 
+} def
+
+/parse {
+    count array astore 
+    /tokens exch def 
+
+    tokens {
+        /token exch def 
+
+        token token_is_operator {
+            %%  if the next symbol is an operator then
+            %%      compare the precedence of [this operator] and [top os stack]
+            %%  if opstack isEmpty or this operator isGreater then 
+            %%      push the operator to optstack 
+
+            opstack_isempty {
+                token opstack_push 
+            }{ 
+            token opstack_get tok_gt {
+                token opstack_push                            
+            }{
+            token opstack_get tok_eq {
+                token opstack_push
+            }{
+            token opstack_get tok_strict_lt {
+                %% current operator is lower than top os stack 
+                %% pop operators until either 
+                %%      1. opstack is empty
+                %%   or 2. precedence of top of stack is stricly less than current operator 
+
+                opstack_pos {
+                    opstack_pop 
+                    dup token tok_strict_lt { exit } if 
+                } repeat  
+
+                token opstack_push 
+            }{
+                
+            } ifelse
+            } ifelse 
+            } ifelse
+            } ifelse
+        }{
+            token 
+        } ifelse
+    } forall  
+
+    opstack_pop_bottom
+    reverse_ps_operand_stack
+    
+} def 

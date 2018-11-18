@@ -1,0 +1,54 @@
+
+/d240 { 240 360_to_1 } def 
+/d120 { 120 360_to_1 } def 
+
+/escape_to_color {                    % real -> real real real 
+
+    /i exch iterate_maximum div def  
+    /g i 360 mul def 
+    
+
+    /h { 1 i sub } def    
+    h 0.333 sub  
+    /h exch def 
+    h 0 lt {  h 1 add } { h } ifelse 
+    /h exch def 
+
+    % h
+    
+    % s
+    
+    %s y=cos(2xPi)      ... 0 < i < 0.25
+    %    abs(cos(2xPi)) ... 0.25 < i < 0.5
+    %    1              ... i > 0.5 
+     
+    i 0.20 lt {
+        i  360 mul cos 
+
+    }{
+    i 0.35 lt {
+        0
+    }{
+    i 0.7 lt {
+        1
+    }{
+    i 1 lt { 
+        i  
+    }{
+        1
+    } ifelse
+    } ifelse
+    } ifelse
+    } ifelse
+    
+    /s exch def  
+
+    %b
+    /b { i 360 mul sin abs  } def 
+
+    h s b  sethsbcolor
+} def 
+
+
+
+

@@ -1,0 +1,64 @@
+
+
+/sqr { dup mul } def                    % real -> real
+
+/complex_add {                          % real imag real image -> real imag
+    /i2 exch def        
+    /r2 exch def 
+    /i1 exch def 
+    /r1 exch def 
+
+    r1 r2 add 
+    i1 i2 add 
+} def 
+
+/complex_sub {                          % real imag real image -> real imag
+    /i2 exch def 
+    /r2 exch def 
+    /i1 exch def 
+    /r1 exch def 
+
+    r1 r2 sub 
+    i1 i2 sub 
+} def 
+
+/complex_mul {                          % real imag real image -> real imag
+    /i2 exch def 
+    /r2 exch def 
+    /i1 exch def 
+    /r1 exch def 
+
+    r1 r2 mul i1 i2 mul sub
+    r1 i2 mul i1 r2 mul add
+} def
+
+/complex_div {                          % real imag real image -> real imag
+    /i2 exch def 
+    /r2 exch def 
+    /i1 exch def 
+    /r1 exch def 
+
+    r1 r2 mul i1 i2 mul add r2 sqr i2 sqr add div   
+    i1 r2 mul r1 i2 mul sub r2 sqr i2 sqr add div  
+} def
+
+/complex_abs {                          % real imag -> real
+    dup mul exch dup mul add sqrt
+} def
+
+/complex_sqr {                          % real imag -> real imag 
+    2 copy complex_mul
+} def 
+
+/complex_cub {                          % real imag -> real imag 
+   2 copy 2 copy complex_mul complex_mul
+} def 
+
+
+/complex_ri_abs {                          % real imag -> real imag 
+    /i exch def 
+    /r exch def 
+
+    r abs i abs 
+} def 
+

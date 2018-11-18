@@ -1,0 +1,46 @@
+%!PS-Adobe-2.0
+%%Mandelbrot Menge 
+%%Creator Thomas Brandstätter
+%%Orientation: Landscape
+%%DocumentMedia: a4 595 842 80 () ()
+%%Pages: 1
+%%EndComments
+%%EndProlog
+%%BeginSetup
+  % A4, rotated 90
+  << /PageSize [595 842] /Orientation 3 >> setpagedevice
+%%EndSetup 
+
+%%Page: 1 1
+%%BeginPageSetup
+  90 rotate 0 -595 translate
+%%EndPageSetup
+
+
+/Courier findfont
+9 scalefont
+0 0 0 setrgbcolor 
+setfont
+
+
+10 0 translate 
+
+(lib/legend.ps) run
+
+/width 800 def 
+/iterate_maximum 800 def 
+
+/yy 60 def  
+[(che) (che2) (continues) (continues3) (default) (green) (lyapunov) (lyapunov2)] {
+    (colors/) exch string_concat (.ps) string_concat dup run
+    yy colormap 
+    0 yy 5 add  moveto show
+
+    yy 60 add /yy exch def 
+
+} forall
+
+
+showpage 
+
+%%EOF 

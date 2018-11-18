@@ -1,0 +1,76 @@
+(lib/test.ps) run 
+
+(lib/parser.ps) run 
+
+/test_osr { test opstack_reset } def 
+
+
+opstack_reset 
+opstack_isempty test 
+
+ut_line_inc
+
+/t1 { (a + b * c - d) tokenize parse } def 
+t1 count 7 eq test_osr
+t1 
+(a) tok_opd tok_eq test_woc  
+(b) tok_opd tok_eq test_woc  
+(c) tok_opd tok_eq test_woc  
+tok_mul tok_eq test_woc 
+tok_add tok_eq test_woc  
+(d) tok_opd tok_eq test_woc  
+tok_sub tok_eq test_osr
+clear
+ut_line_inc
+
+
+
+
+
+/t2 { (a) tokenize parse } def 
+t2 count 1 eq test_osr 
+t2 (a) tok_opd tok_eq test_osr 
+
+ut_line_inc
+
+/t3 { (z) tokenize parse } def 
+t3 count 1 eq test_osr 
+t3 
+(z) tok_opd tok_eq test_osr 
+clear 
+
+ut_line_inc 
+
+
+
+/t4 { (a ++ b ** c -- d) tokenize parse } def 
+t4 count 7 eq test_osr
+t4 
+(a) tok_opd tok_eq test_woc  
+(b) tok_opd tok_eq test_woc  
+(c) tok_opd tok_eq test_woc  
+tok_cmul tok_eq test_woc 
+tok_cadd tok_eq test_woc  
+(d) tok_opd tok_eq test_woc  
+tok_csub tok_eq test_osr 
+clear
+
+ut_line_inc
+
+
+
+/t5 { (a ^^2) tokenize parse } def 
+t5 count 2 eq test_osr 
+
+
+ut_line_inc 
+
+
+/t6 { (a ^^2) tokenize parse } def 
+t6 
+(a) tok_opd tok_eq test_woc 
+tok_ccub tok_eq test_osr
+
+
+ut_line_inc 
+

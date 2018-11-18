@@ -1,0 +1,65 @@
+(lib/test.ps) run 
+
+(lib/parser.ps) run 
+
+/test_osr { test opstack_reset } def 
+
+% t1 
+opstack_isempty test 
+opstack_isfull not test 
+opstack_pos 0 eq testu 
+
+ut_line_inc 
+opstack_reset 
+opstack_isempty test 
+opstack_isfull not test 
+opstack_pos 0 eq testu 
+
+ut_line_inc 
+(adsf) opstack_push 
+opstack_isempty not test 
+opstack_isfull not test 
+
+ut_line_inc 
+opstack_reset 
+opstack_isempty test 
+
+
+100 ut_line_set
+/t101  { (io) opstack_push } def 
+t101 opstack_pos 1 eq test_osr
+t101 opstack_get (io) eq test_osr 
+t101 opstack_pop (io) eq test_osr 
+t101 opstack_pop pop opstack_pos 0 eq test_osr
+
+ut_line_inc 
+/t102  { [1 2 3 4 5 6 7 8] {  opstack_push } forall } def 
+t102 opstack_pos 8 eq test_osr 
+t102 opstack_get 8 eq test_osr 
+t102 opstack_pop 8 eq test_osr 
+
+ut_line_inc
+/t103 { 
+    [1 2 3 4 5 6 7 8] {  opstack_push } forall 
+    8 { opstack_pop } repeat 
+} def 
+t103 opstack_isempty test_osr 
+t103 add 3 eq test_osr 
+
+
+200 ut_line_set
+/t201 { [1 2 3 4 5 6 7 8] {  opstack_push } forall opstack_pop_bottom } def 
+t201 opstack_isempty test_osr 
+t201 opstack_pos 0 eq test_osr 
+
+
+ut_line_inc 
+/t202 { 1 opstack_push opstack_pop_bottom } def 
+t202 opstack_isempty test_osr 
+t202 opstack_pos 0 eq test_osr 
+
+ut_line_inc 
+/t203 { opstack_pop_bottom } def 
+t203 opstack_isempty test_osr 
+t203 opstack_pos 0 eq test_osr 
+
